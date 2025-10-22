@@ -6,9 +6,33 @@
     <title>Randomized BBB Quiz</title>
     <style>
         /* --- General Layout and Container --- */
-        body { font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f4f4f4; color: #333; }
-        .quiz-container { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 8px 15px rgba(0,0,0,0.1); text-align: center; }
-        .question-box { background: #e6f7ff; padding: 25px; border-radius: 8px; margin-bottom: 20px; min-height: 150px; display: flex; flex-direction: column; justify-content: space-between; }
+        body { 
+            font-family: sans-serif; 
+            max-width: 600px; 
+            margin: 0 auto; 
+            padding: 20px; 
+            background-color: transparent; /* Changed: Make body background transparent */
+            color: #333; 
+        }
+        .quiz-container { 
+            background: transparent; /* Changed: Make quiz container background transparent */
+            padding: 30px; 
+            border-radius: 12px; 
+            /* box-shadow: 0 8px 15px rgba(0,0,0,0.1); */ /* Optional: Remove box-shadow or make it very subtle */
+            box-shadow: none; /* Changed: Remove box-shadow for full transparency */
+            text-align: center; 
+        }
+        .question-box { 
+            background: rgba(230, 247, 255, 0.8); /* Slightly transparent light blue for question box */
+            padding: 25px; 
+            border-radius: 8px; 
+            margin-bottom: 20px; 
+            min-height: 150px; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: space-between; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* Subtle shadow for question box */
+        }
         .question-box h4 { margin: 0; font-size: 1.25em; color: #5B4F8C; /* Dark Purple */ text-align: left; }
 
         /* --- Options Styling (Green/Purple Theme, Left Alignment) --- */
@@ -17,7 +41,7 @@
             display: block; 
             margin: 10px 0; 
             padding: 12px 15px; 
-            background-color: #E6F3EB; /* Light Green */
+            background-color: rgba(230, 243, 235, 0.9); /* Slightly transparent Light Green */
             color: #38761D; /* Darker Green Text */
             border: 1px solid #c3e6cb; 
             border-radius: 6px; 
@@ -26,7 +50,7 @@
             font-weight: bold; 
         }
         .options label:hover { 
-            background-color: #D4EDDA; 
+            background-color: rgba(212, 237, 218, 0.95); /* Slightly transparent hover green */
             transform: translateY(-1px); 
         }
         .options input[type="radio"] { display: none; }
@@ -47,7 +71,14 @@
         #check-btn:disabled { background-color: #ccc; cursor: not-allowed; }
         #next-btn { background-color: #5B4F8C; color: white; /* Purple for next */ display: none; }
 
-        #end-splash { padding: 30px; background-color: #5B4F8C; color: white; border-radius: 10px; display: none; }
+        #end-splash { 
+            padding: 30px; 
+            background-color: rgba(91, 79, 140, 0.9); /* Slightly transparent purple for end splash */
+            color: white; 
+            border-radius: 10px; 
+            display: none; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* Subtle shadow for end splash */
+        }
         #end-splash h2 { margin-top: 0; font-size: 2em; }
         #end-splash p { font-size: 1.2em; }
         #end-splash button { background-color: white; color: #5B4F8C; margin-top: 20px; }
@@ -73,26 +104,26 @@
 <script>
 const quizData = [
     // --- FULL QUESTION DATA ARRAY ---
-    { q: "What causes the mislocalization of Claudin-5, a critical tight junction protein?", options: ["a) BBB Breakdown", "b) MMP Overexpression", "c) Reduction in Astrocytic Endfeet", "d) Increased Transcellular Transport"], answer: "b) MMP Overexpression" },
-    { q: "What is the previously tested control drug that served as a positive benchmark for MMP inhibition?", options: ["a) Prinomastat", "b) Quercetin", "c) Minocycline", "d) Tacrolimus"], answer: "a) Prinomastat" },
-    { q: "How does intranasal delivery work to deliver therapeutic agents directly to the brain?", options: ["a) Through the olfactory nerve/epithelium to the cerebrospinal fluid, bypassing the BBB", "b) Through tight junction opening in the nasal mucosa then systemic absorption", "c) Direct injection into the cranial sinus", "d) Uptake via the trigeminal nerve and subsequent transport to the thalamus"], answer: "a) Through the olfactory nerve/epithelium to the cerebrospinal fluid, bypassing the BBB" },
-    { q: "What compounds are predicted to mitigate BBB breakdown, likely through MMP inhibition or anti-inflammatory action?", options: ["a) Lutein", "b) Carotene", "c) Kaempferol", "d) Resveratrol"], answer: "c) Kaempferol" },
-    { q: "Claudin-5 is a key component of which cellular structure in the brain's endothelial cells?", options: ["a) Adherens junctions", "b) Gap junctions", "c) Tight junctions", "d) Desmosomes"], answer: "c) Tight junctions" },
-    { q: "The degradation of Claudin-5 is often mediated by which type of enzyme?", options: ["a) Kinases", "b) Phosphatases", "c) Matrix Metalloproteinases (MMPs)", "d) Acetyltransferases"], answer: "c) Matrix Metalloproteinases (MMPs)" },
-    { q: "Mislocalization of Claudin-5 often leads to what physiological consequence at the BBB?", options: ["a) Increased glucose transport", "b) Increased paracellular permeability", "c) Enhanced transcellular transport", "d) Reduced inflammatory response"], answer: "b) Increased paracellular permeability" },
-    { q: "Which neurological disorders are often associated with Claudin-5 mislocalization and BBB compromise?", options: ["a) Parkinson's disease and Huntington's disease", "b) Multiple Sclerosis and Alzheimer's disease", "c) Peripheral neuropathy", "d) Amyotrophic Lateral Sclerosis (ALS) only"], answer: "b) Multiple Sclerosis and Alzheimer's disease" },
-    { q: "What is the primary role of Matrix Metalloproteinases (MMPs) in a healthy central nervous system?", options: ["a) Production of neurotransmitters", "b) Remodeling of the extracellular matrix (ECM)", "c) Maintaining neuronal membrane potential", "d) Degradation of myelin sheath"], answer: "b) Remodeling of the extracellular matrix (ECM)" },
-    { q: "Overexpression of which specific MMP is most frequently implicated in BBB degradation and stroke?", options: ["a) MMP-2", "b) MMP-9", "c) MMP-1", "d) MMP-14"], answer: "b) MMP-9" },
-    { q: "The mechanism of action for the control drug Prinomastat is likely classified as what?", options: ["a) Angiotensin-converting enzyme inhibitor", "b) Broad-spectrum MMP inhibitor", "c) Non-steroidal anti-inflammatory drug (NSAID)", "d) Free radical scavenger"], answer: "b) Broad-spectrum MMP inhibitor" },
-    { q: "Which signaling pathway, when activated, often leads to the *upregulation* of MMP transcription?", options: ["a) Wnt signaling", "b) NF-κB signaling", "c) Sonic hedgehog signaling", "d) mTOR signaling"], answer: "b) NF-κB signaling" },
-    { q: "Intranasal drug delivery bypasses which major physiological barrier to reach the brain?", options: ["a) The Blood-Cerebrospinal Fluid Barrier (BCSFB)", "b) The Arachnoid Barrier", "c) The Blood-Brain Barrier (BBB)", "d) The Choroid Plexus"], answer: "c) The Blood-Brain Barrier (BBB)" },
-    { q: "What is the main anatomical pathway thought to facilitate the transport of drugs from the nasal cavity to the brain?", options: ["a) Olfactory bulb capillaries", "b) Direct transport via the trigeminal nerve", "c) Perineural and perivascular routes via the olfactory epithelium", "d) Systemic circulation followed by rapid uptake"], answer: "c) Perineural and perivascular routes via the olfactory epithelium" },
-    { q: "Quercetin and Kaempferol belong to which major class of natural compounds?", options: ["a) Terpenoids", "b) Alkaloids", "c) Flavonoids", "d) Polysaccharides"], answer: "c) Flavonoids" },
-    { q: "What is the common mechanism by which natural compounds like Kaempferol are hypothesized to mitigate BBB breakdown?", options: ["a) Acting as a Calcium channel blocker", "b) Direct competitive binding to Claudin-5", "c) Anti-oxidant and anti-inflammatory properties, potentially downregulating MMPs", "d) Enhancing microglial phagocytosis"], answer: "c) Anti-oxidant and anti-inflammatory properties, potentially downregulating MMPs" },
-    { q: "Which experimental technique is commonly used to quantify BBB integrity *in vitro* (e.g., in a transwell model)?", options: ["a) Western blotting", "b) Measurement of Trans-Endothelial Electrical Resistance (TEER)", "c) Enzyme-Linked Immunosorbent Assay (ELISA)", "d) Polymerase Chain Reaction (PCR)"], answer: "b) Measurement of Trans-Endothelial Electrical Resistance (TEER)" },
-    { q: "In an *in vivo* model, BBB breakdown is often assessed by measuring the extravasation of which marker?", options: ["a) Glucose", "b) Albumin", "c) Evans Blue dye (or Sodium Fluorescein)", "d) Neurotransmitter metabolites"], answer: "c) Evans Blue dye (or Sodium Fluorescein)" },
-    { q: "What specific cell type forms the crucial anatomical basis of the Blood-Brain Barrier?", options: ["a) Astrocytes", "b) Brain Microvascular Endothelial Cells (BMVECs)", "c) Pericytes", "d) Oligodendrocytes"], answer: "b) Brain Microvascular Endothelial Cells (BMVECs)" },
-    { q: "In the study, the beneficial effects of the compounds are likely compared against the effects of which substance/model?", options: ["a) High-dose neuroleptic drugs", "b) An induced condition mimicking BBB breakdown (e.g., ischemia or inflammation)", "c) Healthy, untreated controls only", "d) A general metabolic stimulant"], answer: "b) An induced condition mimicking BBB breakdown (e.g., ischemia or inflammation)" }
+    { q: "1. What causes the mislocalization of Claudin-5, a critical tight junction protein?", options: ["a) BBB Breakdown", "b) MMP Overexpression", "c) Reduction in Astrocytic Endfeet", "d) Increased Transcellular Transport"], answer: "b) MMP Overexpression" },
+    { q: "2. What is the previously tested control drug that served as a positive benchmark for MMP inhibition?", options: ["a) Prinomastat", "b) Quercetin", "c) Minocycline", "d) Tacrolimus"], answer: "a) Prinomastat" },
+    { q: "3. How does intranasal delivery work to deliver therapeutic agents directly to the brain?", options: ["a) Through the olfactory nerve/epithelium to the cerebrospinal fluid, bypassing the BBB", "b) Through tight junction opening in the nasal mucosa then systemic absorption", "c) Direct injection into the cranial sinus", "d) Uptake via the trigeminal nerve and subsequent transport to the thalamus"], answer: "a) Through the olfactory nerve/epithelium to the cerebrospinal fluid, bypassing the BBB" },
+    { q: "4. What compounds are predicted to mitigate BBB breakdown, likely through MMP inhibition or anti-inflammatory action?", options: ["a) Lutein", "b) Carotene", "c) Kaempferol", "d) Resveratrol"], answer: "c) Kaempferol" },
+    { q: "5. Claudin-5 is a key component of which cellular structure in the brain's endothelial cells?", options: ["a) Adherens junctions", "b) Gap junctions", "c) Tight junctions", "d) Desmosomes"], answer: "c) Tight junctions" },
+    { q: "6. The degradation of Claudin-5 is often mediated by which type of enzyme?", options: ["a) Kinases", "b) Phosphatases", "c) Matrix Metalloproteinases (MMPs)", "d) Acetyltransferases"], answer: "c) Matrix Metalloproteinases (MMPs)" },
+    { q: "7. Mislocalization of Claudin-5 often leads to what physiological consequence at the BBB?", options: ["a) Increased glucose transport", "b) Increased paracellular permeability", "c) Enhanced transcellular transport", "d) Reduced inflammatory response"], answer: "b) Increased paracellular permeability" },
+    { q: "8. Which neurological disorders are often associated with Claudin-5 mislocalization and BBB compromise?", options: ["a) Parkinson's disease and Huntington's disease", "b) Multiple Sclerosis and Alzheimer's disease", "c) Peripheral neuropathy", "d) Amyotrophic Lateral Sclerosis (ALS) only"], answer: "b) Multiple Sclerosis and Alzheimer's disease" },
+    { q: "9. What is the primary role of Matrix Metalloproteinases (MMPs) in a healthy central nervous system?", options: ["a) Production of neurotransmitters", "b) Remodeling of the extracellular matrix (ECM)", "c) Maintaining neuronal membrane potential", "d) Degradation of myelin sheath"], answer: "b) Remodeling of the extracellular matrix (ECM)" },
+    { q: "10. Overexpression of which specific MMP is most frequently implicated in BBB degradation and stroke?", options: ["a) MMP-2", "b) MMP-9", "c) MMP-1", "d) MMP-14"], answer: "b) MMP-9" },
+    { q: "11. The mechanism of action for the control drug Prinomastat is likely classified as what?", options: ["a) Angiotensin-converting enzyme inhibitor", "b) Broad-spectrum MMP inhibitor", "c) Non-steroidal anti-inflammatory drug (NSAID)", "d) Free radical scavenger"], answer: "b) Broad-spectrum MMP inhibitor" },
+    { q: "12. Which signaling pathway, when activated, often leads to the *upregulation* of MMP transcription?", options: ["a) Wnt signaling", "b) NF-κB signaling", "c) Sonic hedgehog signaling", "d) mTOR signaling"], answer: "b) NF-κB signaling" },
+    { q: "13. Intranasal drug delivery bypasses which major physiological barrier to reach the brain?", options: ["a) The Blood-Cerebrospinal Fluid Barrier (BCSFB)", "b) The Arachnoid Barrier", "c) The Blood-Brain Barrier (BBB)", "d) The Choroid Plexus"], answer: "c) The Blood-Brain Barrier (BBB)" },
+    { q: "14. What is the main anatomical pathway thought to facilitate the transport of drugs from the nasal cavity to the brain?", options: ["a) Olfactory bulb capillaries", "b) Direct transport via the trigeminal nerve", "c) Perineural and perivascular routes via the olfactory epithelium", "d) Systemic circulation followed by rapid uptake"], answer: "c) Perineural and perivascular routes via the olfactory epithelium" },
+    { q: "15. Quercetin and Kaempferol belong to which major class of natural compounds?", options: ["a) Terpenoids", "b) Alkaloids", "c) Flavonoids", "d) Polysaccharides"], answer: "c) Flavonoids" },
+    { q: "16. What is the common mechanism by which natural compounds like Kaempferol are hypothesized to mitigate BBB breakdown?", options: ["a) Acting as a Calcium channel blocker", "b) Direct competitive binding to Claudin-5", "c) Anti-oxidant and anti-inflammatory properties, potentially downregulating MMPs", "d) Enhancing microglial phagocytosis"], answer: "c) Anti-oxidant and anti-inflammatory properties, potentially downregulating MMPs" },
+    { q: "17. Which experimental technique is commonly used to quantify BBB integrity *in vitro* (e.g., in a transwell model)?", options: ["a) Western blotting", "b) Measurement of Trans-Endothelial Electrical Resistance (TEER)", "c) Enzyme-Linked Immunosorbent Assay (ELISA)", "d) Polymerase Chain Reaction (PCR)"], answer: "b) Measurement of Trans-Endothelial Electrical Resistance (TEER)" },
+    { q: "18. In an *in vivo* model, BBB breakdown is often assessed by measuring the extravasation of which marker?", options: ["a) Glucose", "b) Albumin", "c) Evans Blue dye (or Sodium Fluorescein)", "d) Neurotransmitter metabolites"], answer: "c) Evans Blue dye (or Sodium Fluorescein)" },
+    { q: "19. What specific cell type forms the crucial anatomical basis of the Blood-Brain Barrier?", options: ["a) Astrocytes", "b) Brain Microvascular Endothelial Cells (BMVECs)", "c) Pericytes", "d) Oligodendrocytes"], answer: "b) Brain Microvascular Endothelial Cells (BMVECs)" },
+    { q: "20. In the study, the beneficial effects of the compounds are likely compared against the effects of which substance/model?", options: ["a) High-dose neuroleptic drugs", "b) An induced condition mimicking BBB breakdown (e.g., ischemia or inflammation)", "c) Healthy, untreated controls only", "d) A general metabolic stimulant"], answer: "b) An induced condition mimicking BBB breakdown (e.g., ischemia or inflammation)" }
 ];
 
 let currentQuestionIndex = 0;
@@ -147,9 +178,12 @@ function loadQuestion() {
     shuffledOptions.forEach((option, index) => {
         const labelText = optionLabels[index]; // 'a', 'b', 'c', or 'd'
         
+        // Remove 'a) ', 'b) ', etc., from the actual option text if it exists
+        const displayOptionText = option.substring(option.indexOf(')') + 1).trim();
+
         htmlContent += `
             <input type="radio" id="q${currentQuestionIndex}o${index}" name="currentQuestion" value="${option}">
-            <label for="q${currentQuestionIndex}o${index}">${labelText}) ${option.substring(option.indexOf(')') + 1).trim()}</label>
+            <label for="q${currentQuestionIndex}o${index}">${labelText}) ${displayOptionText}</label>
         `;
     });
 
@@ -183,7 +217,7 @@ function checkAnswer() {
 
     if (!selectedOption) {
         feedbackDiv.className = 'feedback incorrect-feedback';
-        feedbackDiv.innerHTML = `⚠️ Unanswered. The correct answer is: <strong>${item.answer}</strong>`;
+        feedbackDiv.innerHTML = `⚠️ Unanswered. The correct answer is: <strong>${item.answer.substring(item.answer.indexOf(')') + 1).trim()}</strong>`;
     } else {
         const userAnswer = selectedOption.value;
         if (userAnswer === item.answer) {
@@ -191,7 +225,7 @@ function checkAnswer() {
             feedbackDiv.className = 'feedback correct-feedback';
             feedbackDiv.innerHTML = '✅ **Correct!**';
         } else {
-            // Highlight the correct answer
+            // Highlight the correct answer by finding its label
             document.querySelectorAll('label').forEach(label => {
                 const inputElement = document.getElementById(label.htmlFor);
                 if (inputElement && inputElement.value === item.answer) {
@@ -201,7 +235,7 @@ function checkAnswer() {
             });
 
             feedbackDiv.className = 'feedback incorrect-feedback';
-            feedbackDiv.innerHTML = `❌ **Incorrect.** The correct answer is: <strong>${item.answer}</strong>`;
+            feedbackDiv.innerHTML = `❌ **Incorrect.** The correct answer is: <strong>${item.answer.substring(item.answer.indexOf(')') + 1).trim()}</strong>`;
         }
     }
     
@@ -255,4 +289,3 @@ loadQuestion();
 
 </body>
 </html>
-
